@@ -14,7 +14,8 @@ setup(
         'statepub'
     ],
     install_requires=[
-
+        'psutil',
+        'paho-mqtt'
     ],
     python_requires='~=3.5',
     zip_safe=False
