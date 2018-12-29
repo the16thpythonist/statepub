@@ -64,10 +64,14 @@ class ComputingState(StateInterface):
         CHANGELOG
 
         Added 28.12.2018
+
+        Changed 29.12.2018
+        Added the 'temp' attribute which will store the processor temperature
         """
         self.attributes = {
             'cpu':  '0.0',
-            'ram':  '0.0'
+            'ram':  '0.0',
+            'temp': '0.0'
         }
 
     def acquire(self):
@@ -78,6 +82,9 @@ class ComputingState(StateInterface):
         CHANGELOG
 
         Added 28.12.2018
+
+        Changed 29.12.2018
+        Added the acquistion of the cpu temperature value
 
         :return:
         """
@@ -90,6 +97,14 @@ class ComputingState(StateInterface):
         # just using the percentage of used RAM as a indicator. This value is stored in the percent attribute of the
         # returned wrapper object.
         self.attributes['ram'] = psutil.virtual_memory().percent
+
+        # 29.12.2018
+        # Getting the temperature of the machine. The function returns a list with multiple values. one for each
+        # individual core. We will be using the first value in the list, which will be a more general value for the
+        # whole processor chip. And obviously we want the values to be in degrees celsius not fahrenheit. The current
+        # attribute of the wrapper object in the list stores the actual sensor reading.
+        # TODO: Add a if clause to check if the machine even features temp sensors.
+        self.attributes['temp'] = psutil.sensors_temperatures(fahrenheit=False)[0].current
 
     def to_dict(self):
         """
@@ -134,6 +149,19 @@ class ComputingState(StateInterface):
         :return:
         """
         return self.attributes['ram']
+
+    @property
+    def temp(self):
+        """
+        Property read access for the cpu temperature value
+
+        CHANGELOG
+
+        Added 29.12.2018
+
+        :return:
+        """
+        return self.attributes['temp']
 
 
 class NetworkState(StateInterface):
