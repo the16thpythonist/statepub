@@ -99,9 +99,15 @@ class ComputingState(StateInterface):
 
         Added 28.12.2018
 
+        Changed 29.12.2018
+        Returning a copy of the internal dict to prevent side effects on the object.
+
         :return:
         """
-        return self.attributes
+        # 29.12.2018
+        # We are returning a copy of the dict, because otherwise we would just be returning a reference to the actual
+        # internal dict. And if that got modified, this object would be modified as well
+        return self.attributes.copy()
 
     @property
     def cpu(self):
@@ -176,9 +182,15 @@ class NetworkState(StateInterface):
 
         Added 28.12.2018
 
+        Changed 29.12.2018
+        Returning a copy of the internal dict to prevent side effects on the object.
+
         :return:
         """
-        return self.attributes
+        # 29.12.2018
+        # We are returning a copy of the dict, because otherwise we would just be returning a reference to the actual
+        # internal dict. And if that got modified, this object would be modified as well
+        return self.attributes.copy()
 
     @property
     def bytes_sent(self):
