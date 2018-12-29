@@ -48,14 +48,39 @@ class StateInterface:
 
 
 class ComputingState(StateInterface):
+    """
+    This state represents the performance info about the machine on which the script is running. This included the
+    percentage of CPU usage, the percentage of RAM usage and the current temperature in degrees celcius.
+    All these values will give a slight indication of whether the machine is under an especially heavy load or not
 
+    CHANGELOG
+
+    Added 28.12.2018
+    """
     def __init__(self):
+        """
+        The constructor.
+
+        CHANGELOG
+
+        Added 28.12.2018
+        """
         self.attributes = {
             'cpu':  '0.0',
             'ram':  '0.0'
         }
 
     def acquire(self):
+        """
+        This function will read all the values about the machine from the operating system and update the object
+        attributes with the new values.
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         # Getting the CPU usage as a percentage. The interval=1 makes a blocking call, that observes the CPU usage for
         # one second. The percpu=False makes it so
         # that only a single value is returned, which will be the average over all the cores.
@@ -67,26 +92,76 @@ class ComputingState(StateInterface):
         self.attributes['ram'] = psutil.virtual_memory().percent
 
     def to_dict(self):
+        """
+        Creates a dictionary with all the values based on the current attributes of the object
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes
 
     @property
     def cpu(self):
+        """
+        Property read access to the percentage of CPU usage
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes['cpu']
 
     @property
     def ram(self):
+        """
+        Property read access to the percentage of the RAM usage
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes['ram']
 
 
 class NetworkState(StateInterface):
+    """
+    This state represents the network info about the system on which the program is running on.
+    Currently this includes the total bytes sent since the start of the system(! not the program)
 
+    CHANGELOG
+
+    Added 28.12.2018
+    """
     def __init__(self):
+        """
+        The constructor.
+
+        CHANGELOG
+
+        Added 28.12.2018
+        """
         self.attributes = {
             'bytes_sent': '0',
             'bytes_recv': '0',
         }
 
     def acquire(self):
+        """
+        This method reads the values from the operating system and updates the object attributes with the new values.
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         # This function will return the wrapper object which contains all the network statistics
         network_stats = psutil.net_io_counters()
 
@@ -94,12 +169,40 @@ class NetworkState(StateInterface):
         self.attributes['bytes_recv'] = network_stats.bytes_recv
 
     def to_dict(self):
+        """
+        Returns a dict, which contains all the values of the state, based on the current attributes of the object
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes
 
     @property
     def bytes_sent(self):
+        """
+        Property read access for the value of sent bytes
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes['bytes_sent']
 
     @property
     def bytes_recv(self):
+        """
+        Property read access for the value of received bytes
+
+        CHANGELOG
+
+        Added 28.12.2018
+
+        :return:
+        """
         return self.attributes['bytes_recv']
+
