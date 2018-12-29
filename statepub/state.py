@@ -79,6 +79,8 @@ class ComputingState(StateInterface):
         This function will read all the values about the machine from the operating system and update the object
         attributes with the new values.
 
+        The measurement of the CPU usage takes a second to complete. Please bare this on mind.
+
         CHANGELOG
 
         Added 28.12.2018
@@ -103,8 +105,10 @@ class ComputingState(StateInterface):
         # individual core. We will be using the first value in the list, which will be a more general value for the
         # whole processor chip. And obviously we want the values to be in degrees celsius not fahrenheit. The current
         # attribute of the wrapper object in the list stores the actual sensor reading.
-        # TODO: Add a if clause to check if the machine even features temp sensors.
-        self.attributes['temp'] = psutil.sensors_temperatures(fahrenheit=False)[0].current
+        try:
+            self.attributes['temp'] = psutil.sensors_temperatures(fahrenheit=False)['coretemp'][0].current
+        except:
+            self.attributes['temp'] = '0.0'
 
     def to_dict(self):
         """
