@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='statepub',
-    version='0.0.0.0',
+    version='0.0.0.1',
     description='A program for publishing the current state of a computing machine to the MQTT network',
     url='https://github.com/the16thpythonist/statepub',
     author='Jonas Teufel',
