@@ -15,8 +15,13 @@ setup(
     ],
     install_requires=[
         'psutil',
-        'paho-mqtt'
+        'paho-mqtt',
+        'click'
     ],
+    entry_points="""
+    [console_scripts]
+    publish-status=statepub.scripts.publish-status:cli
+    """,
     python_requires='~=3.5',
     zip_safe=False
 )
