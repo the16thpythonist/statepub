@@ -16,13 +16,13 @@ def cli(interval, broker_port, broker_ip, topic):
     After invoking this command, it will repeatedly after set intervals sent the status of this machine to the MQTT
     network
     """
-    click.echo('hello')
+    click.echo('Starting to publish status to broker at "{}::{}"'.format(broker_ip, broker_port))
 
     publisher = StatePublisher(topic, broker_ip, broker_port=broker_port)
 
     try:
         while True:
-            time_seconds = round(time.time() * 1000)
+            time_seconds = round(time.time())
             if time_seconds % interval:
 
                 # Actually execute the relevant code for the publishing here
@@ -31,10 +31,8 @@ def cli(interval, broker_port, broker_ip, topic):
 
             time.sleep(0.1)
 
+    except OSError:
+        click.echo('Couldnt connect to broker')
+
     except KeyboardInterrupt:
         publisher.close()
-        raise KeyboardInterrupt()
-
-
-if __name__ == '__main__':
-    cli()
